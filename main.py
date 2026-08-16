@@ -1,47 +1,49 @@
 import socket
 import time
-from operator import truediv
 
 
-def dns_resolve(domain: str) -> None | str:
+def dns_resolve(domain: str) -> str:
     """Getting IP address"""
-    ip = 0
-    start = time.perf_counter() # start counting
-    try:
-        ip  = socket.gethostbyname(domain)
-        print(f"IP address: {ip}")
-    except socket.gaierror:
-        print("Failed to resolve IP address")
-    finally:
-        print("Ended IP check with the result:", "success" if ip else "failure")
+    ip = ""
+    while not ip:
+        start = time.perf_counter()  # start counting
+        try:
+            ip  = socket.gethostbyname(domain)
+            elapsed = time.perf_counter() - start  # end counting
+            print(f"IP address: {ip}, time: {elapsed * 1000:.2f} ms")
+        except socket.gaierror:
+            elapsed = time.perf_counter() - start  # end counting
+            print(f"Failed to resolve IP address, time: {elapsed * 1000:.2f} ms")
+            domain = input("Enter the domain AGAIN: ")
+        finally:
+            print("Ended IP check with the result:", "success" if ip else "failure, try again!")
 
-    elapsed = time.perf_counter() - start # end counting
-    print(f"DNS resolved in {elapsed * 1000:.2f} ms")
+    return ip
 
 
-def tcp_handshake(domain: str) -> None | str:
+def tcp_handshake(ip: str) -> None | str:
     """TCP Handshake"""
-    succeed = False
-    start = time.perf_counter() # start counting
-
+    ports_to_check = {443}
     try:
-        socket.create_connection((domain, 443), timeout=2)
-        succeed = True
-    except (socket.timeout, OSError, ConnectionRefusedError, ConnectionResetError) as e:
-        print("Failed to create connection")
-    finally:
-        print("Ended connection check with the result:", "success" if succeed else "failure")
+        ports_to_check.update(map(int, input("Type ports you want to check, except 443: ").split()))
+    except ValueError:
+        print("Invalid port number")
 
-
-    elapsed = time.perf_counter() - start # end counting
-    print(f"TCP handshake in {elapsed * 1000:.2f} ms")
-
-
+    for port in ports_to_check:
+        start = time.perf_counter()
+        try:
+            conn = socket.create_connection((ip, port), timeout=2)
+            elapsed = time.perf_counter() - start
+            print(f"TCP handshake to port {port} in {elapsed * 1000:.2f} ms")
+            conn.close()
+        except (socket.gaierror, OSError, ConnectionRefusedError, ConnectionResetError, ConnectionAbortedError) as e:
+            elapsed = time.perf_counter() - start
+            print(f"Unable to connect to port: {port}, time: {elapsed * 1000:.2f} ms")
 
 
 # Program starts
 domain = input("Enter the domain: ")
-print(f"Checking: {domain}")
+skipping = input(f"Checking: {domain}, press enter to continue...")
 
-dns_resolve(domain)
-tcp_handshake(domain)
+ip = dns_resolve(domain)
+tcp_handshake(ip)
