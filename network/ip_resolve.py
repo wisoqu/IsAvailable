@@ -16,7 +16,6 @@ import time
 import socket
 
 
-
 def dns_resolve(domain: str):
     info = {
         "success": False,
@@ -33,8 +32,8 @@ def dns_resolve(domain: str):
     if not isinstance(domain, str):
         info.update(
             error_type="InvalidInput",
-            explanation="Домен должен быть строкой.",
-            recommendation="Передайте доменное имя в формате 'example.com'.",
+            explanation="The domain must be a string.",
+            recommendation="Provide a domain name in the format 'example.com'.",
         )
         return None, info
 
@@ -43,8 +42,8 @@ def dns_resolve(domain: str):
     if not domain:
         info.update(
             error_type="InvalidInput",
-            explanation="Доменное имя пустое.",
-            recommendation="Укажите доменное имя, например 'example.com'.",
+            explanation="The domain name is empty.",
+            recommendation="Provide a domain name, for example 'example.com'.",
         )
         return None, info
 
@@ -56,8 +55,8 @@ def dns_resolve(domain: str):
             success=True,
             elapsed_ms=(time.perf_counter() - start) * 1000,
             error_type="",
-            explanation=f"Домен '{domain}' успешно разрешён в IP-адрес {ip}.",
-            recommendation="Ошибок не обнаружено.",
+            explanation=f"Domain '{domain}' was successfully resolved to IP address {ip}.",
+            recommendation="No errors detected.",
         )
 
     except socket.gaierror as e:
@@ -71,14 +70,14 @@ def dns_resolve(domain: str):
             info.update(
                 error_type="EAI_NONAME",
                 explanation=(
-                    f"DNS не смог найти домен '{domain}'. "
-                    "Сервер имён сообщает, что такое имя не существует "
-                    "или для него отсутствует подходящая DNS-запись."
+                    f"DNS could not resolve the domain '{domain}'. "
+                    "The name server reports that the domain does not exist "
+                    "or that there is no suitable DNS record for it."
                 ),
                 recommendation=(
-                    "Проверьте правильность написания домена. "
-                    "Если домен правильный, проверьте DNS-записи "
-                    "и используемый DNS-сервер."
+                    "Check whether the domain name is spelled correctly. "
+                    "If the domain is correct, check its DNS records "
+                    "and the DNS server being used."
                 ),
             )
 
@@ -86,13 +85,13 @@ def dns_resolve(domain: str):
             info.update(
                 error_type="EAI_AGAIN",
                 explanation=(
-                    "DNS-запрос временно не удалось выполнить. "
-                    "Это может быть кратковременная проблема DNS-сервера "
-                    "или сети."
+                    "The DNS request could not be completed temporarily. "
+                    "This may be caused by a temporary DNS server "
+                    "or network problem."
                 ),
                 recommendation=(
-                    "Повторите запрос через несколько секунд "
-                    "и проверьте сетевое соединение."
+                    "Retry the request after a few seconds "
+                    "and check your network connection."
                 ),
             )
 
@@ -100,12 +99,12 @@ def dns_resolve(domain: str):
             info.update(
                 error_type="EAI_FAIL",
                 explanation=(
-                    "DNS-сервер сообщил о постоянной ошибке "
-                    "при попытке разрешить доменное имя."
+                    "The DNS server reported a permanent failure "
+                    "while trying to resolve the domain name."
                 ),
                 recommendation=(
-                    "Проверьте доступность DNS-сервера, DNS-зону "
-                    "домена и настройки сети."
+                    "Check the DNS server availability, the domain's DNS zone, "
+                    "and your network configuration."
                 ),
             )
 
@@ -113,12 +112,11 @@ def dns_resolve(domain: str):
             info.update(
                 error_type="EAI_FAMILY",
                 explanation=(
-                    "DNS-запрос использовал неподдерживаемое "
-                    "семейство адресов."
+                    "The DNS request used an unsupported address family."
                 ),
                 recommendation=(
-                    "Проверьте настройки IPv4/IPv6 "
-                    "и параметры DNS-запроса."
+                    "Check your IPv4/IPv6 configuration "
+                    "and DNS request parameters."
                 ),
             )
 
@@ -126,13 +124,13 @@ def dns_resolve(domain: str):
             info.update(
                 error_type=f"DNS_ERROR_{error_code}",
                 explanation=(
-                    f"Произошла DNS-ошибка при разрешении '{domain}'. "
-                    f"Системный код ошибки: {error_code}. "
-                    f"Сообщение ОС: {e}"
+                    f"A DNS error occurred while resolving '{domain}'. "
+                    f"System error code: {error_code}. "
+                    f"OS message: {e}"
                 ),
                 recommendation=(
-                    "Проверьте подключение к сети, настройки DNS "
-                    "и доступность DNS-сервера."
+                    "Check your network connection, DNS configuration, "
+                    "and DNS server availability."
                 ),
             )
 
@@ -141,12 +139,12 @@ def dns_resolve(domain: str):
             elapsed_ms=(time.perf_counter() - start) * 1000,
             error_type="Timeout",
             explanation=(
-                f"DNS-запрос для '{domain}' превысил допустимое "
-                "время ожидания."
+                f"The DNS request for '{domain}' exceeded the allowed "
+                "time limit."
             ),
             recommendation=(
-                "Проверьте соединение с интернетом и доступность "
-                "DNS-сервера. Попробуйте другой DNS-сервер."
+                "Check your network connection and DNS server availability. "
+                "Try using another DNS server."
             ),
         )
 
@@ -155,12 +153,12 @@ def dns_resolve(domain: str):
             elapsed_ms=(time.perf_counter() - start) * 1000,
             error_type="OSError",
             explanation=(
-                "Операционная система не смогла выполнить DNS-запрос. "
-                f"Сообщение ОС: {e}"
+                "The operating system could not complete the DNS request. "
+                f"OS message: {e}"
             ),
             recommendation=(
-                "Проверьте сетевое подключение, настройки DNS "
-                "и системные сетевые параметры."
+                "Check your network connection, DNS configuration, "
+                "and system network settings."
             ),
         )
 
@@ -171,13 +169,13 @@ def dns_resolve(domain: str):
             elapsed_ms=(time.perf_counter() - start) * 1000,
             error_type=type(e).__name__,
             explanation=(
-                "Произошла непредвиденная ошибка во время "
-                f"DNS-разрешения: {e}"
+                "An unexpected error occurred during DNS resolution: "
+                f"{e}"
             ),
             recommendation=(
-                "Проверьте входные данные и состояние системы. "
-                "Если ошибка повторяется, сохраните её тип и сообщение "
-                "для дальнейшей диагностики."
+                "Check the input data and system state. "
+                "If the error persists, save its type and message "
+                "for further diagnosis."
             ),
         )
 
