@@ -1,7 +1,19 @@
+"""
+
+Returning ip | None, logs
+
+info = {
+    "success": False,
+    "elapsed_ms": -1.0,
+    "error_type": "",
+    "explanation": "",
+    "recommendation": "",
+}
+
+"""
+
 import time
 import socket
-
-
 
 
 

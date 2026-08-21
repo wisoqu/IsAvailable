@@ -1,5 +1,21 @@
+"""
+
+Returning tcp_connection | None, logs
+
+info = {
+    "port": port,
+    "success": None,
+    "elapsed_ms": -1.0,
+    "error_type": "",
+    "explanation": "",
+    "recommendation": "",
+}
+
+"""
+
 import socket
 import time
+
 
 
 def tcp_handshake(ip: str, port: int) -> tuple[socket.socket | None, dict]:
