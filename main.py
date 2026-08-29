@@ -28,11 +28,13 @@ except ValueError:
 
 LOGS["ports"] = {}
 for port in ports_to_check:
+    LOGS["ports"][port] = {}
+
     tcp_conn, tcp_logs = tcp_handshake(ip,port)
-    LOGS["ports"][port] = tcp_logs
+    LOGS["ports"][port]["tcp_log"] = tcp_logs
 
     tls_conn, tls_logs = tls_handshake(tcp_conn,domain)
-    LOGS["tls_handshake"] = tls_logs
+    LOGS["ports"][port]["tls_log"] = tls_logs
 
 with open("tcp_dump.json", "w", encoding="utf-8") as file:
     json.dump(LOGS, file, indent=4, ensure_ascii=False)

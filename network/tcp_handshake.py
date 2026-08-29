@@ -6,7 +6,7 @@ def tcp_handshake(ip: str, port: int) -> tuple[socket.socket | None, dict]:
     """Проверяет ОДИН порт. Возвращает (соединение или None, инфо о попытке)."""
 
     info = {
-        "port": port,
+        "type" : "TCP_CONN",
         "success": None,
         "elapsed_ms": -1.0,
         "error_type": "",

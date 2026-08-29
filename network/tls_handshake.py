@@ -12,6 +12,7 @@ def tls_handshake(
     """
 
     info = {
+        "type" : "TLS_CONN",
         "success": None,
         "elapsed_ms": -1.0,
         "error_type": "",
