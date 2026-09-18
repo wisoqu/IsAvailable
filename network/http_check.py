@@ -67,11 +67,18 @@ def http_check(conn, domain: str, path: str = "/") -> tuple[dict | None, dict]:
         f"\r\n"
     )
 
+    HTTP_RECV_TIMEOUT_S = 10  # вынес магическое число в константу
+    MAX_RESPONSE_BYTES = 65536  # больше не читаем — нам нужны заголовки и начало тела
+
+    #Hard limit: recv() cannot wait forever
+    conn.settimeout(HTTP_RECV_TIMEOUT_S)
+
     try:
         conn.sendall(request.encode("ascii"))
 
         response = b""
         ttfb_ms = None
+        truncated = False
 
         while True:
             chunk = conn.recv(4096)
@@ -89,6 +96,10 @@ def http_check(conn, domain: str, path: str = "/") -> tuple[dict | None, dict]:
                 break
 
             response += chunk
+
+            if len(response) >= MAX_RESPONSE_BYTES:
+                truncated = True
+                break
 
         elapsed_ms = (time.perf_counter() - start) * 1000
 

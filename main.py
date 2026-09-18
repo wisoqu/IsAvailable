@@ -65,5 +65,8 @@ for port in ports_to_check:
     http_response, http_logs = http_check(http_conn, domain, path)
     LOGS["ports"][port]["http_log"] = http_logs
 
+    if http_conn is not None:
+        http_conn.close()
+
 with open("tcp_dump.json", "w", encoding="utf-8") as file:
     json.dump(LOGS, file, indent=4, ensure_ascii=False)
