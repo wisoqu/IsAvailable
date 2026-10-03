@@ -1,0 +1,40 @@
+{
+    "domain": "google.com",
+    "path": "/",
+    "ip": "74.125.131.138",
+    "ip_logs": {
+        "success": true,
+        "elapsed_ms": 18.320299917832017,
+        "error_type": "",
+        "explanation": "Domain 'google.com' was successfully resolved to IP address 74.125.131.138.",
+        "recommendation": "No errors detected."
+    },
+    "ports": {
+        "443": {
+            "tcp_log": {
+                "type": "TCP_CONN",
+                "success": true,
+                "elapsed_ms": 128.79410001914948,
+                "error_type": "",
+                "explanation": "TCP connection established successfully.",
+                "recommendation": "No TCP problems detected."
+            },
+            "tls_log": {
+                "type": "TLS_CONN",
+                "success": true,
+                "elapsed_ms": 153.09999999590218,
+                "error_type": "",
+                "explanation": "TLS handshake successful."
+            },
+            "http_log": {
+                "type": "HTTP_CHECK",
+                "success": true,
+                "elapsed_ms": 234.76560006383806,
+                "ttfb_ms": 232.41779999807477,
+                "error_type": "",
+                "explanation": "Server responded with 301 and redirects to 'https://www.google.com/'.",
+                "recommendation": "This is a redirect, not a failure — confirm the destination is the expected one for this target."
+            }
+        }
+    }
+}
